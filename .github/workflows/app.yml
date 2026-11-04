@@ -64,13 +64,39 @@ jobs:
           $un = Get-ChildItem "$env:LOCALAPPDATA\Reference" -Filter uninstall.exe | Select-Object -First 1
           if ($un) { Start-Process $un.FullName -ArgumentList "/S" -Wait; Write-Host "Uninstall OK" }
 
+      - name: Read version
+        id: v
+        shell: bash
+        run: echo "version=$(node -p "require('./app/src-tauri/tauri.conf.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Publish Windows setup right away (does not wait for Mac)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: app-v${{ steps.v.outputs.version }}
+          name: Reference App ${{ steps.v.outputs.version }}
+          make_latest: true
+          files: out/Reference-Setup.exe
+          body: |
+            برنامه‌ی Reference برای ویندوز و مک. بدون اینترنت هم کار می‌کند.
+
+            ویندوز:
+            ۱. فایل Reference-Setup.exe را دانلود کن.
+            ۲. روی آن دوبار کلیک کن. تمام.
+
+            مک:
+            ۱. فایل Reference-Mac.dmg را دانلود کن و باز کن.
+            ۲. Reference را داخل پوشه‌ی Applications بکش.
+            ۳. بار اول: روی Reference راست‌کلیک کن و Open را بزن.
+               اگر باز نشد: System Settings → Privacy & Security → پایین صفحه، Open Anyway.
+
       - uses: actions/upload-artifact@v4
         with:
           name: windows
           path: out/Reference-Setup.exe
 
   mac:
-    runs-on: macos-15-intel
+    needs: windows
+    runs-on: macos-14
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
@@ -110,42 +136,12 @@ jobs:
           echo "App is running OK"
           kill $PID
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: mac
-          path: out/Reference-Mac.dmg
-
-  release:
-    needs: [windows, mac]
-    if: ${{ always() && needs.windows.result == 'success' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          path: out
-          merge-multiple: true
       - name: Read version
         id: v
         run: echo "version=$(node -p "require('./app/src-tauri/tauri.conf.json').version")" >> $GITHUB_OUTPUT
-      - uses: softprops/action-gh-release@v2
+
+      - name: Add Mac installer to the same release
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: app-v${{ steps.v.outputs.version }}
-          name: Reference App ${{ steps.v.outputs.version }}
-          make_latest: true
-          fail_on_unmatched_files: false
-          files: |
-            out/Reference-Setup.exe
-            out/Reference-Mac.dmg
-          body: |
-            برنامه‌ی Reference برای ویندوز و مک. بدون اینترنت هم کار می‌کند.
-
-            ویندوز:
-            ۱. فایل Reference-Setup.exe را دانلود کن.
-            ۲. روی آن دوبار کلیک کن. تمام.
-
-            مک:
-            ۱. فایل Reference-Mac.dmg را دانلود کن و باز کن.
-            ۲. Reference را داخل پوشه‌ی Applications بکش.
-            ۳. بار اول: روی Reference راست‌کلیک کن و Open را بزن.
-               اگر باز نشد: System Settings → Privacy & Security → پایین صفحه، Open Anyway.
+          files: out/Reference-Mac.dmg
