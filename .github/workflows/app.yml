@@ -70,7 +70,8 @@ jobs:
           path: out/Reference-Setup.exe
 
   mac:
-    runs-on: macos-latest
+    runs-on: macos-15-intel
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -116,6 +117,7 @@ jobs:
 
   release:
     needs: [windows, mac]
+    if: ${{ always() && needs.windows.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -131,6 +133,7 @@ jobs:
           tag_name: app-v${{ steps.v.outputs.version }}
           name: Reference App ${{ steps.v.outputs.version }}
           make_latest: true
+          fail_on_unmatched_files: false
           files: |
             out/Reference-Setup.exe
             out/Reference-Mac.dmg
