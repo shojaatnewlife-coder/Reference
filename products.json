@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "products": [
+    {
+      "id": "silk",
+      "name": "Reference Silk",
+      "fa": "درخشش و گرمای ترانسفورمری، با دو پیچ قرمز و آبی",
+      "en": "Transformer silk for highs and lows, in two knobs.",
+      "image": "img/silk.jpg",
+      "free": true,
+      "price": "",
+      "download": "https://github.com/shojaatnewlife-coder/reference/releases",
+      "download_ir": ""
+    },
+    {
+      "id": "ambience",
+      "name": "Reference Ambience",
+      "fa": "ریورب همه‌کاره",
+      "en": "An all-purpose reverb.",
+      "image": "img/ambience.jpg",
+      "free": false,
+      "price": "",
+      "download": "",
+      "download_ir": ""
+    },
+    {
+      "id": "mixavisor",
+      "name": "Reference MixAvisor",
+      "fa": "دستیار حرفه‌ای میکس و مسترینگ",
+      "en": "A pro mixing and mastering assistant.",
+      "image": "img/mixavisor.jpg",
+      "free": false,
+      "price": "",
+      "download": "",
+      "download_ir": ""
+    },
+    {
+      "id": "balance",
+      "name": "Reference Balance",
+      "fa": "آنالایزر حرفه‌ای میکس و مسترینگ",
+      "en": "A pro analyzer for mixing and mastering.",
+      "image": "img/balance.jpg",
+      "free": false,
+      "price": "",
+      "download": "",
+      "download_ir": ""
+    },
+    {
+      "id": "eq",
+      "name": "Reference EQ",
+      "fa": "داینامیک اکولایزر همه‌کاره",
+      "en": "An all-purpose dynamic EQ.",
+      "image": "img/eq.jpg",
+      "free": false,
+      "price": "",
+      "download": "",
+      "download_ir": ""
+    },
+    {
+      "id": "kick",
+      "name": "Reference Kick",
+      "fa": "Kick همه‌کاره",
+      "en": "An all-purpose Kick designer.",
+      "image": "img/kick.jpg",
+      "free": false,
+      "price": "",
+      "download": "",
+      "download_ir": ""
+    }
+  ]
+}
